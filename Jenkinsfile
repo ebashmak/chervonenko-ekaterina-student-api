@@ -12,14 +12,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo '=== Stage 2: Compiling Spring Boot application for Ekaterina Chervonenko ==='
-                sh './gradlew clean bootJar --no-daemon'
+                sh 'gradle clean bootJar --no-daemon'
             }
         }
 
         stage('Test') {
             steps {
                 echo '=== Stage 3: Executing automated tests ==='
-                sh './gradlew test --no-daemon'
+                sh 'gradle test --no-daemon'
             }
         }
 
