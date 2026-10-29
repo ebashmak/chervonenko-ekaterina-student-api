@@ -1,0 +1,13 @@
+#Logs
+logs/
+*.log
+
+#IDE 
+.idea/
+.vscode/
+*.swp
+
+#Java / Build Directories
+target/
+build/
+.grandle/
