@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: chervonenko-ekaterina-postgres
+    environment:
+      POSTGRES_DB: student_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d student_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: chervonenko-ekaterina-student-api:v1.0-chervonenko-ekaterina
+    container_name: chervonenko-ekaterina-student-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/student_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    networks:
+      - app-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    name: chervonenko-ekaterina-volume
+
+networks:
+  app-network:
+    name: chervonenko-ekaterina-network
